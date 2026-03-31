@@ -2,68 +2,178 @@
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <title>Жылу - Қайырымдылық анкетасы</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Жүрек жылуы | Қайырымдылық сауалнамасы</title>
     <style>
-        body { font-family: sans-serif; background-color: #fffaf0; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { color: #d35400; }
-        input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { background-color: #e67e22; color: white; cursor: pointer; border: none; }
-        .admin-section { margin-top: 30px; border-top: 2px dashed #e67e22; padding-top: 20px; }
-        ul { list-style: none; padding: 0; }
-        li { background: #f9f9f9; margin: 5px 0; padding: 10px; border-left: 5px solid #e67e22; }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            color: #2d3748;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .survey-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(229, 62, 62, 0.1);
+            margin-bottom: 30px;
+        }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #e53e3e; font-size: 26px; margin-bottom: 8px; }
+        header p { color: #718096; font-size: 14px; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 15px; }
+
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 12px;
+            font-size: 15px; outline: none; box-sizing: border-box; transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus { border-color: #feb2b2; }
+
+        .btn-submit {
+            width: 100%; background-color: #e53e3e; color: white; padding: 16px;
+            border: none; border-radius: 14px; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s; margin-top: 10px;
+        }
+
+        .btn-submit:hover { background-color: #c53030; }
+
+        /* ТІЗІМ БӨЛІМІНІҢ ДИЗАЙНЫ */
+        .admin-section {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .admin-section h3 { color: #e53e3e; border-bottom: 2px solid #fed7d7; padding-bottom: 10px; }
+
+        #user-list { list-style: none; padding: 0; }
+        .user-item {
+            background: #fff5f5;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #e53e3e;
+            display: flex;
+            justify-content: space-between;
+        }
+        .user-item span { font-weight: bold; color: #c53030; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>"Жылу" жобасы: Анкета толтыру</h2>
-    <input type="text" id="userName" placeholder="Аты-жөніңізді жазыңыз">
-    <input type="text" id="userHelp" placeholder="Қандай көмек керек немесе бере аласыз?">
-    <button onclick="saveData()">Жіберу</button>
+    <div class="survey-card">
+        <header>
+            <h1>❤️ Жүрек жылуы</h1>
+            <p>Қайырымдылық туралы ойыңызбен бөлісіңіз</p>
+        </header>
 
-    <div class="admin-section">
-        <h3>Тіркелген адамдар тізімі (Админ үшін):</h3>
-        <ul id="userList"></ul>
-        <button onclick="clearData()" style="background: grey; font-size: 12px;">Тізімді тазалау</button>
+        <!-- Formspree ID-ді осы жерге қойыңыз (мысалы: https://formspree.io) -->
+        <form id="charity-form" action="https://formspree.io" method="POST">
+            
+            <div class="form-group">
+                <label>Атыңыз:</label>
+                <input type="text" id="userName" name="Аты-жөні" placeholder="Атыңызды жазыңыз..." required>
+            </div>
+
+            <div class="form-group">
+                <label>1. Сіз үшін қайырымдылық деген не?</label>
+                <select name="Қайырымдылық_анықтамасы" required>
+                    <option value="" disabled selected>Таңдаңыз...</option>
+                    <option value="Қаржылай">Мұқтаждарға қаржылай көмек</option>
+                    <option value="Рухани">Рухани қолдау және жылы сөз</option>
+                    <option value="Волонтерлік">Ерікті (волонтер) болу</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2. Ізгі тілегіңіз:</label>
+                <textarea name="Тілек_ұсыныс" rows="3" placeholder="Ойыңызды жазыңыз..." required></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn-submit">Жіберу</button>
+            <p id="status-msg" style="text-align: center; margin-top: 10px;"></p>
+        </form>
     </div>
-</div>
 
-<script>
-    // Мәліметті сақтау функциясы
-    function saveData() {
-        const name = document.getElementById('userName').value;
-        const help = document.getElementById('userHelp').value;
-        
-        if(name && help) {
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push({name: name, help: help});
-            localStorage.setItem('users', JSON.stringify(users));
-            alert("Мәлімет сақталды!");
-            displayData();
+    <!-- ТІРКЕЛГЕНДЕР ТІЗІМІ -->
+    <div class="admin-section">
+        <h3>Тіркелген жандар тізімі:</h3>
+        <ul id="user-list">
+            <!-- Осы жерге есімдер автоматты түрде қосылады -->
+        </ul>
+    </div>
+
+    <script>
+        const form = document.getElementById("charity-form");
+        const userList = document.getElementById("user-list");
+
+        // Бет жүктелгенде тізімді көрсету
+        function updateList() {
+            const users = JSON.parse(localStorage.getItem('charity_users')) || [];
+            userList.innerHTML = "";
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'user-item';
+                li.innerHTML = `<span>${user.name}</span> <small>${user.date}</small>`;
+                userList.appendChild(li);
+            });
         }
-    }
 
-    // Мәліметті экранға шығару
-    function displayData() {
-        const list = document.getElementById('userList');
-        list.innerHTML = "";
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        users.forEach(user => {
-            let li = document.createElement('li');
-            li.textContent = `${user.name} — ${user.help}`;
-            list.appendChild(li);
-        });
-    }
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('userName').value;
+            const status = document.getElementById("status-msg");
+            const button = document.getElementById("submit-btn");
 
-    function clearData() {
-        localStorage.removeItem('users');
-        displayData();
-    }
+            button.disabled = true;
+            button.innerHTML = "Жіберілуде...";
 
-    // Бет ашылғанда тізімді көрсету
-    displayData();
-</script>
+            const data = new FormData(event.target);
+            
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    // Атын тізімге қосу
+                    const users = JSON.parse(localStorage.getItem('charity_users')) || [];
+                    const now = new Date().toLocaleDateString();
+                    users.push({ name: name, date: now });
+                    localStorage.setItem('charity_users', JSON.stringify(users));
+                    
+                    alert("Рақмет! Сіздің жүрек жылуыңыз қабылданды.");
+                    updateList();
+                    form.reset();
+                } else {
+                    status.innerHTML = "Қате орын алды.";
+                }
+            }).catch(error => {
+                status.innerHTML = "Желіде қате.";
+            }).finally(() => {
+                button.disabled = false;
+                button.innerHTML = "Жіберу";
+            });
+        }
+
+        form.addEventListener("submit", handleSubmit);
+        updateList();
+    </script>
 
 </body>
 </html>
